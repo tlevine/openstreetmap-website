@@ -15,6 +15,7 @@
 //= require map
 //= require menu
 //= require sidebar
+//= require leaflet.share
 //= require richtext
 //= require resize
 //= require geocoder
