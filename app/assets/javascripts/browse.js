@@ -1,10 +1,10 @@
 $(document).ready(function () {
   function remoteEditHandler(bbox, select) {
-    var left = bbox.getWestLng() - 0.0001;
-    var top = bbox.getNorthLat() + 0.0001;
-    var right = bbox.getEastLng() + 0.0001;
-    var bottom = bbox.getSouthLat() - 0.0001;
-    var loaded = false;
+    var left = bbox.getWestLng() - 0.0001,
+        top = bbox.getNorthLat() + 0.0001,
+        right = bbox.getEastLng() + 0.0001,
+        bottom = bbox.getSouthLat() - 0.0001,
+        loaded = false;
 
     $("#linkloader").load(function () { loaded = true; });
 
@@ -34,9 +34,10 @@ $(document).ready(function () {
   });
 
   var params = $("#small_map").data();
+  var object, bbox;
   if (params.type == "changeset") {
-    var bbox = L.latLngBounds([params.minlat, params.minlon],
-                              [params.maxlat, params.maxlon]);
+    bbox = L.latLngBounds([params.minlat, params.minlon],
+        [params.maxlat, params.maxlon]);
 
     map.fitBounds(bbox);
 
@@ -55,13 +56,13 @@ $(document).ready(function () {
 
     updatelinks(map.getCenter(), 16, null, params.minlon, params.minlat, params.maxlon, params.maxlat);
   } else if (params.type == "note") {
-    var object = {type: params.type, id: params.id};
+    object = {type: params.type, id: params.id};
 
     map.setView([params.lat, params.lon], 16);
 
     L.marker([params.lat, params.lon], { icon: getUserIcon() }).addTo(map);
 
-    var bbox = map.getBounds();
+    bbox = map.getBounds();
 
     $("#loading").hide();
     $("#browse_map .geolink").show();
@@ -75,10 +76,9 @@ $(document).ready(function () {
                 bbox.getEastLng(), bbox.getNorthLat(),
                 object);
   } else {
-    $("#object_larger_map").hide();
-    $("#object_edit").hide();
+    $("#object_larger_map, #object_edit").hide();
 
-    var object = {type: params.type, id: params.id};
+    object = {type: params.type, id: params.id};
 
     if (!params.visible) {
       object.version = params.version - 1;

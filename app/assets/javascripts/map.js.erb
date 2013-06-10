@@ -95,13 +95,8 @@ function getUserIcon(url) {
 }
 
 function addObjectToMap(object, zoom, map, callback) {
-  if (objectLoader) {
-    objectLoader.abort();
-  }
-
-  if (objectLayer) {
-    map.removeLayer(objectLayer);
-  }
+  if (objectLoader) objectLoader.abort();
+  if (objectLayer) map.removeLayer(objectLayer);
 
   objectLoader = $.ajax({
     url: OSM.apiUrl(object),
@@ -132,15 +127,8 @@ function addObjectToMap(object, zoom, map, callback) {
 
       objectLayer.addData(xml);
 
-      var bounds = objectLayer.getBounds();
-
-      if (zoom) {
-        map.fitBounds(bounds);
-      }
-
-      if (callback) {
-        callback(bounds);
-      }
+      if (zoom) map.fitBounds(objectLayer.getBounds());
+      if (callback) callback(objectLayer.getBounds());
 
       objectLayer.addTo(map);
     }
