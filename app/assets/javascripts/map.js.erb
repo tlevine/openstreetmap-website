@@ -53,7 +53,7 @@ var layers;
 var objectLayer;
 var objectLoader;
 
-function createMap(divName, options) {
+function createMap(divName, options, moreOptions) {
   if (!layers) {
     layers = [
       {
@@ -87,6 +87,8 @@ function createMap(divName, options) {
     ];
   }
 
+  moreOptions = moreOptions || {};
+
   options = $.extend({zoomControl: true, panZoomControl: true, layerControl: true}, options);
 
   map = L.map(divName, $.extend({}, options, {panControl: false, zoomsliderControl: false, maxZoom: 18}));
@@ -101,6 +103,13 @@ function createMap(divName, options) {
   if (options.layerControl) {
     layersControl.addTo(map);
     map.layersControl = layersControl;
+  }
+
+  if (moreOptions.locateControl) {
+    var loc = L.control.locate({
+        position: 'topright'
+    });
+    loc.addTo(map);
   }
 
   for (var i = 0; i < layers.length; i++) {
