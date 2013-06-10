@@ -54,7 +54,8 @@ $(document).ready(function () {
       return remoteEditHandler(bbox);
     });
 
-    updatelinks(map.getCenter(), 16, null, params.minlon, params.minlat, params.maxlon, params.maxlat);
+    updatelinks(map.getCenter(), 16, null, [[params.minlat, params.minlon],
+        [params.maxlat, params.maxlon]]);
   } else if (params.type == "note") {
     object = {type: params.type, id: params.id};
 
@@ -100,13 +101,7 @@ $(document).ready(function () {
         $("#object_larger_map").show();
         $("#object_edit").show();
 
-        updatelinks(map.getCenter(),
-                    16, null,
-                    extent.getWestLng(),
-                    extent.getSouthLat(),
-                    extent.getEastLng(),
-                    extent.getNorthLat(),
-                    object);
+        updatelinks(map.getCenter(), 16, null, extent, object);
       } else {
         $("#small_map").hide();
       }
