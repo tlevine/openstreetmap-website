@@ -9,7 +9,10 @@ $(document).ready(function () {
   var permalinks = $("#permalink").detach().html();
   var marker;
   var params = OSM.mapParams();
-  var map = createMap("map", {layerControl: false});
+  var map = createMap("map", {zoomControl: false, layerControl: false});
+
+  L.control.zoom({position: 'topright'})
+    .addTo(map);
 
   OSM.mapUI().addTo(map);
 
