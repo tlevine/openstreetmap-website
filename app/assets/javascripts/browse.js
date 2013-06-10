@@ -53,8 +53,7 @@ $(document).ready(function () {
       return remoteEditHandler(bbox);
     });
 
-    var centre = bbox.getCenter();
-    updatelinks(centre.lng, centre.lat, 16, null, params.minlon, params.minlat, params.maxlon, params.maxlat);
+    updatelinks(map.getCenter(), 16, null, params.minlon, params.minlat, params.maxlon, params.maxlat);
   } else if (params.type == "note") {
     var object = {type: params.type, id: params.id};
 
@@ -71,7 +70,7 @@ $(document).ready(function () {
       return remoteEditHandler(bbox);
     });
 
-    updatelinks(params.lon, params.lat, 16, null,
+    updatelinks(params, 16, null,
                 bbox.getWestLng(), bbox.getSouthLat(),
                 bbox.getEastLng(), bbox.getNorthLat(),
                 object);
@@ -101,9 +100,7 @@ $(document).ready(function () {
         $("#object_larger_map").show();
         $("#object_edit").show();
 
-        var centre = extent.getCenter();
-        updatelinks(centre.lng,
-                    centre.lat,
+        updatelinks(map.getCenter(),
                     16, null,
                     extent.getWestLng(),
                     extent.getSouthLat(),
