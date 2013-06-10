@@ -5,11 +5,29 @@
 //= require index/notes
 //= require index/map_ui
 
+var map, layers; // TODO: remove globals
+
 $(document).ready(function () {
-  var permalinks = $("#permalink").detach().html();
   var marker;
   var params = OSM.mapParams();
-  var map = createMap("map", {zoomControl: false, layerControl: false});
+
+  map = L.map("map", {
+    attributionControl: false,
+    zoomControl: false,
+    layerControl: false
+  });
+
+  layers = mapLayers();
+
+  for (var i = 0; i < layers.length; i++) {
+    layers[i].layer = new (layers[i].klass)(layers[i]);
+  }
+
+  layers[0].layer.addTo(map);
+
+  $("#map").on("resized", function () {
+    map.invalidateSize();
+  });
 
   L.control.zoom({position: 'topright'})
     .addTo(map);
@@ -34,8 +52,6 @@ $(document).ready(function () {
   }).addTo(map);
 
   L.control.scale().addTo(map);
-
-  map.attributionControl.setPrefix(permalinks);
 
   map.on("moveend layeradd layerremove", updateLocation);
 
@@ -67,7 +83,7 @@ $(document).ready(function () {
   }
 
   if (params.object) {
-    addObjectToMap(params.object, params.object_zoom);
+    addObjectToMap(params.object, params.object_zoom, map);
   }
 
   handleResize();
@@ -86,7 +102,7 @@ $(document).ready(function () {
     }
 
     if (data.type && data.id) {
-      addObjectToMap(data, true);
+      addObjectToMap(data, true, map);
     }
 
     if (marker) {
@@ -167,3 +183,36 @@ $(document).ready(function () {
     $("#query").focus();
   }
 });
+
+function getMapBaseLayer() {
+  for (var i = 0; i < layers.length; i++) {
+    if (map.hasLayer(layers[i].layer)) {
+      return layers[i];
+    }
+  }
+}
+
+function getMapLayers() {
+  var layerConfig = "";
+  for (var i = 0; i < layers.length; i++) {
+    if (map.hasLayer(layers[i].layer)) {
+      layerConfig += layers[i].layerCode;
+    }
+  }
+  return layerConfig;
+}
+
+function setMapLayers(layerConfig) {
+  var foundLayer = false;
+  for (var i = 0; i < layers.length; i++) {
+    if (layerConfig.indexOf(layers[i].layerCode) >= 0) {
+      map.addLayer(layers[i].layer);
+      foundLayer = true;
+    } else {
+      map.removeLayer(layers[i].layer);
+    }
+  }
+  if (!foundLayer) {
+    map.addLayer(layers[0].layer);
+  }
+}
