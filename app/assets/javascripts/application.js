@@ -48,7 +48,7 @@ function updatelinks(loc, zoom, layers, bounds, object) {
     var minlon = toPrecision(bounds.getWestLng()),
         minlat = toPrecision(bounds.getSouthLat()),
         maxlon = toPrecision(bounds.getEastLng()),
-        maxlat = toPrecision(bounds.getNorth());
+        maxlat = toPrecision(bounds.getNorthLat());
   }
 
   $(".geolink").each(setGeolink);
